@@ -1,0 +1,1 @@
+next u have to change the api call so that it remembers the previous questions and answers and based on that it replys okay
