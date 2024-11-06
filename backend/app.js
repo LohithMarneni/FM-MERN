@@ -16,8 +16,10 @@ app.use(cors(
         credentials:true,
     }
 ))
+// console.log(process.env.FRONTEND_URL);
 app.use('/api/v1',contactMeRouter);
 app.use('/api/v1/user',userRouter);
 app.use('/api/v1/questions',questionsRouter);
 app.use(errorMiddleWare);
+
 export default app;

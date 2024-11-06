@@ -11,11 +11,12 @@ import SignUp from './components/SignUp/SignUp.jsx'
 const router=createBrowserRouter(
   createRoutesFromChildren(
     <Route path='/' element={<App/>}>
-        <Route path="home" element={<Home/>}/>
+        <Route index element={<Home />} /> 
         <Route path="about" element={<AboutMe/>}/>
         <Route path="contactus" element={<ContactUs/>}/>
         <Route path="Login" element={<Login/>}/>
         <Route path="signup" element={<SignUp/>}/>  
+        <Route path="*" element={<h1>Not Found</h1>} />
     </Route>
   )
 )

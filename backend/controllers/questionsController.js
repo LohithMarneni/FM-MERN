@@ -33,7 +33,7 @@ export const getQuestions = async (req, res) => {
     res.json(questions); // Send questions to the frontend
   } catch (error) {
     console.error("Error generating questions:", error);
-    res.status(500).json({ error: "Failed to generate questions" });
+    res.status(500).json({ message: "Failed to generate questions" });
   }
 };
 

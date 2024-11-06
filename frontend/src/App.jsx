@@ -14,10 +14,12 @@ function App() {
       backgroundImage: `url(${backgroundImage})`,
      }}
     >
-    <div className="absolute inset-0 bg-black opacity-40"></div>
+    <div className="absolute inset-0 bg-black opacity-40 z-0"></div>
+    <div className='relative z-10'>
     <Navbar/>
     <Outlet/>
     <Footer/>
+    </div>
     </div>
     </>
   )
