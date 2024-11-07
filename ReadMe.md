@@ -2,3 +2,4 @@ next u have to change the api call so that it remembers the previous questions a
 Till now for backend u have only written to give suggestion i future u should have to return places also for suggestion based on user location
 02-11-2024: updated front end and checked backend whether it was functioning correctly or not 
 05-11-2024: added routes and login page completed
+08-11-2024 when submit is clicked it was blank page instead of home page

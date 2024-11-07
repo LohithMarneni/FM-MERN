@@ -8,6 +8,7 @@ import AboutMe from './components/AboutMe/AboutMe.jsx'
 import ContactUs from './components/ContactUs/ContactUs.jsx'
 import Login from './components/Login/Login.jsx'
 import SignUp from './components/SignUp/SignUp.jsx'
+export const server="http://localhost:4000/api/v1";
 const router=createBrowserRouter(
   createRoutesFromChildren(
     <Route path='/' element={<App/>}>

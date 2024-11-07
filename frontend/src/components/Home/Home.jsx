@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import GetQuestions from "../GetQuestions/GetQuestions";
+import { server } from '../../main';
+import useUserContext from '../../context/userContext';
+import Login from '../Login/Login';
+import { Navigate } from 'react-router-dom';
 function Home() {
   const [start, setStart] = useState(false);
   const [questions,setQuestions] = useState([]);
+  const {isAuthenticated}=useUserContext;
   const handleClick=async ()=>{
     try{
       console.log("Fetching questions...");
-      const response = await fetch('http://localhost:4000/api/v1/questions/get-questions', {
+      const response = await fetch(`${server}/questions/get-questions`, {
         credentials: "include"
     });
       if(!response.ok) {
@@ -21,6 +26,10 @@ function Home() {
       console.log(`Error: ${e}`);
     }
   }
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       {(!start)?<button

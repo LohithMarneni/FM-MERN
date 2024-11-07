@@ -1,12 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from "./components/Navbar/Navbar.jsx"
 import backgroundImage from './assets/backgroundImage.jpg';
 import { Outlet } from 'react-router-dom';
 import Footer from './components/Footer/Footer.jsx';
+import {UserContextProvider} from "./context/userContext.js";
+import { server } from './main.jsx';
+import axios from 'axios';
 function App() {
-
+  const [isAuthenticated,setIsAuthenticated]=useState(false);
+  const [user,setUser]=useState({});
+  const [loader,setLoader]=useState(false);
+  // useEffect(()=>{
+  //   setLoader(true);
+  //   axios.get(`${server}/user/me`,{
+  //     withCredentials:true,
+  //   }).then(res=>{
+  //     setUser(res.data.user);
+  //     setIsAuthenticated(true);
+  //     setLoader(false);
+  //   }).catch((error)=>{
+  //     // toast.error(error.response.data.message);
+  //     setUser({});
+  //     setIsAuthenticated(false);
+  //     setLoader(false);
+  //   });
+  // },[]);
   return (
-    <>
+    <UserContextProvider value={
+      {
+        isAuthenticated,
+        user,
+        loader,
+        setIsAuthenticated,
+        setUser,
+        setLoader
+      }
+    }>
     {/* <h1 className="bg-slate-700">This is FrontEnd of FM project(This line is for Debugging)</h1>  */}
     <div
      className="bg-fixed bg-cover bg-center min-h-screen"
@@ -21,7 +50,7 @@ function App() {
     <Footer/>
     </div>
     </div>
-    </>
+    </UserContextProvider>
   )
 }
 
