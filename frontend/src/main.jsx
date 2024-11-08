@@ -23,6 +23,7 @@ const router=createBrowserRouter(
 )
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    {/* 2 times toast is coming because of this strictmode.This commonly happens in development mode when using React's strict mode, which intentionally runs components twice on initial render to help detect side effects.  */}
   <RouterProvider router={router} />
   </StrictMode>
 )

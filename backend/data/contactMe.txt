@@ -1,1 +1,13 @@
-This is Lohith Marneni
+
+Welcome to Food with Mood!
+
+At Food with Mood, we believe food can tell a lot about a person’s mood and personality! Our goal is to bring a fun and interactive way to discover the food that matches your current mood. Whether you're feeling adventurous or laid-back, we’ve got a food suggestion that’s just right for you.
+
+Food with Mood is a simple and engaging web application designed to help you explore how your mood can be paired with food. By answering a few funny and quirky food-related questions, you’ll receive personalized food suggestions that match your personality and emotions.
+
+If you refresh the page, new questions will be generated to keep the fun going!
+Whether you’re trying to figure out what snack to eat, looking for a meal that suits your vibe, or simply want to pass the time with a little food humor, Food with Mood is the perfect way to get food recommendations tailored to you.
+
+Enjoy the journey through your mood, and happy munching!
+
+The food suggestions are based purely on fun and randomness. We don’t guarantee that they’ll actually match your taste preferences, but we hope they’ll bring a smile to your face!

@@ -3,3 +3,4 @@ Till now for backend u have only written to give suggestion i future u should ha
 02-11-2024: updated front end and checked backend whether it was functioning correctly or not 
 05-11-2024: added routes and login page completed
 08-11-2024 when submit is clicked it was blank page instead of home page
+09-11-2024 completed till frontend signup contact about contact and otjer features need to start to work on questions

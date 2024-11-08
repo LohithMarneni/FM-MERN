@@ -4,7 +4,7 @@ export const UserContext=createContext({
     isAuthenticated:false,
     user:{},
     Loader:false,
-    setIsAuthenicated:()=>{},
+    setIsAuthenticated:()=>{},
     setUser:()=>{},
     setLoader:()=>{},
 });

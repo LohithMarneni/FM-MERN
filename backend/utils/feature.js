@@ -13,7 +13,7 @@ export const sendCookie=(user,res,message,statusCode=200)=>{
     },process.env.JWT_SECRET)
     res.status(statusCode).cookie("token",token,{
          httpOnly:true,
-         maxAge:10*60*1000,
+         maxAge:1*60*1000,//increase to 1 hr in future present kept for 1 min for testing
          sameSite:process.env.NODE_ENV==="Development"?"lax":"none",
          secure:process.env.NODE_ENV==="Development"?false:true,
     }).json({

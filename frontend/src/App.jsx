@@ -6,25 +6,26 @@ import Footer from './components/Footer/Footer.jsx';
 import {UserContextProvider} from "./context/userContext.js";
 import { server } from './main.jsx';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 function App() {
   const [isAuthenticated,setIsAuthenticated]=useState(false);
   const [user,setUser]=useState({});
   const [loader,setLoader]=useState(false);
-  // useEffect(()=>{
-  //   setLoader(true);
-  //   axios.get(`${server}/user/me`,{
-  //     withCredentials:true,
-  //   }).then(res=>{
-  //     setUser(res.data.user);
-  //     setIsAuthenticated(true);
-  //     setLoader(false);
-  //   }).catch((error)=>{
-  //     // toast.error(error.response.data.message);
-  //     setUser({});
-  //     setIsAuthenticated(false);
-  //     setLoader(false);
-  //   });
-  // },[]);
+  useEffect(()=>{
+    setLoader(true);
+    axios.get(`${server}/user/getme`,{
+      withCredentials:true,
+    }).then(res=>{
+      setUser(res.data.user);
+      setIsAuthenticated(true);
+      setLoader(false);
+    }).catch((error)=>{
+      toast.error(error.response.data.message);
+      setUser({});
+      setIsAuthenticated(false);
+      setLoader(false);
+    });
+  },[]);
   return (
     <UserContextProvider value={
       {
@@ -36,6 +37,7 @@ function App() {
         setLoader
       }
     }>
+    <div><Toaster/></div>
     {/* <h1 className="bg-slate-700">This is FrontEnd of FM project(This line is for Debugging)</h1>  */}
     <div
      className="bg-fixed bg-cover bg-center min-h-screen"
