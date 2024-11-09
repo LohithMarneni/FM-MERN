@@ -4,3 +4,5 @@ Till now for backend u have only written to give suggestion i future u should ha
 05-11-2024: added routes and login page completed
 08-11-2024 when submit is clicked it was blank page instead of home page
 09-11-2024 completed till frontend signup contact about contact and otjer features need to start to work on questions
+09-11-2024-completed the backend updated to store questions in db and user for the respective fetch 
+10-11-2024- completed the frontend upto getting the suggestions need to add toast as well as loader features

@@ -10,8 +10,8 @@ export const isAuthenticated=async (req,res,next)=>{
     }
     try{
         const decoded=jwt.verify(token,process.env.JWT_SECRET);
-    req.user=await User.findById(decoded._id);
-    next();
+        req.user=await User.findById(decoded._id);
+        next();
     }
     catch(e){
         return res.status(500).json({

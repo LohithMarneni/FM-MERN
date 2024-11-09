@@ -8,6 +8,7 @@ import AboutMe from './components/AboutMe/AboutMe.jsx'
 import ContactUs from './components/ContactUs/ContactUs.jsx'
 import Login from './components/Login/Login.jsx'
 import SignUp from './components/SignUp/SignUp.jsx'
+import DisplaySuggestions from './components/DisplaySuggestions/DisplaySuggestions.jsx'
 export const server="http://localhost:4000/api/v1";
 const router=createBrowserRouter(
   createRoutesFromChildren(
@@ -17,6 +18,7 @@ const router=createBrowserRouter(
         <Route path="contactus" element={<ContactUs/>}/>
         <Route path="Login" element={<Login/>}/>
         <Route path="signup" element={<SignUp/>}/>  
+        <Route path="/displaySuggestions" element={<DisplaySuggestions />} />
         <Route path="*" element={<h1>Not Found</h1>} />
     </Route>
   )

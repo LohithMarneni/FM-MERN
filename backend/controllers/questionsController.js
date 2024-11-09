@@ -1,80 +1,119 @@
-import axios from "axios";
+import Questions from "../models/questionsSchema.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-// Initialize conversation history
-let conversationHistory = [];
-
 export const getQuestions = async (req, res) => {
-  // Clear the conversation history on each question generation
-  conversationHistory = [];
-
-  const prompt = `Generate exactly 5 funny and crazy food-related questions and options that help understand the mood and character of the person who answers them. every time give questions randomly 
-    Output strictly in JSON format as an array of objects like:
-    [
-      {
-        "question": "Your question here?",
-        "options": ["Option 1", "Option 2", "Option 3", "Option 4"]
-      },
-      ...
-    ]
-    Only return the JSON, nothing else.`;
+  const prompt = `Generate exactly 5 funny and crazy food-related questions and options in JSON format only. 
+  The format should be:
+  [
+    {
+    "question": "Your question here?",
+    "options": ["Option 1", "Option 2", "Option 3", "Option 4"]
+    },
+    ...
+  ]
+  Only return the JSON array, with no extra comments, explanations, or symbols.`;
 
   try {
     const result = await model.generateContent(prompt);
-    const responseText = await result.response.text();
-    const questions = JSON.parse(responseText);
+    let responseText = await result.response.text();
+    responseText = responseText.trim();
 
-    // Store questions in conversation history for future reference
-    conversationHistory.push({ role: "system", content: prompt });
-    conversationHistory.push({ role: "assistant", content: responseText });
+    let questionsData;
+    try {
+      questionsData = JSON.parse(responseText);
+    } catch (jsonError) {
+      console.error("Error parsing JSON:", jsonError);
+      return res
+        .status(500)
+        .json({ message: "Failed to parse questions JSON format." });
+    }
 
-    res.json(questions); // Send questions to the frontend
+    const questionSet = await Questions.create({
+      user: req.user._id,
+      questions: questionsData,
+    });
+    
+    res.status(200).json(questionsData);
   } catch (error) {
     console.error("Error generating questions:", error);
     res.status(500).json({ message: "Failed to generate questions" });
   }
 };
-
 export const getSuggestions = async (req, res) => {
   const userAnswers = req.body.answers;
 
-  if (!userAnswers || !Array.isArray(userAnswers)) {
-      return res.status(400).json({ error: 'Answers should be an array of options.' });
+  if (!userAnswers || !Array.isArray(userAnswers) || userAnswers.length === 0) {
+    return res
+      .status(400)
+      .json({ error: "Answers should be an array of options." });
   }
 
-  // Add user answers to conversation history
-  conversationHistory.push({ role: "user", content: `Answers: ${JSON.stringify(userAnswers)}` });
-
-  // Combine questions and user answers for a contextual prompt
-  const historyContent = conversationHistory.map(entry => `${entry.role}: ${entry.content}`).join("\n");
-  const prompt = `Here are the questions and user answers: \n${historyContent} \n\nBased on these answers, suggest exactly 3 foods that match the user's character and mood. 
-  Output strictly in JSON format as:
-  [
-    {
-      "food": "Food item name",
-      "description": "Brief description of why it matches their mood"
-    },
-    ...
-  ]
-  Only return the JSON, nothing else.`;
-
   try {
-      const result = await model.generateContent(prompt);
-      const responseText = await result.response.text();
-      const suggestions = JSON.parse(responseText);
+    // Fetch the latest question set for the authenticated user
+    const questionSet = await Questions.findOne({ user: req.user._id }).sort({
+      createdAt: -1,
+    });
 
-      // Append the suggestions to the conversation history
-      // conversationHistory.push({ role: "system", content: prompt });
-      // conversationHistory.push({ role: "assistant", content: responseText });
+    if (!questionSet) {
+      return res
+        .status(404)
+        .json({ error: "No questions found to associate answers with." });
+    }
 
-      res.json(suggestions); // Send suggestions to frontend
+    questionSet.questions.forEach((question, index) => {
+      question.userAnswer = userAnswers[index] || null;
+    });
 
-      // Clear conversation history after suggestions are provided
-      conversationHistory = [];
+    await questionSet.save();
+
+    const conversationHistory = [
+      {
+        role: "system",
+        content: `Questions: ${JSON.stringify(questionSet.questions)}`,
+      },
+      { role: "user", content: `Answers: ${JSON.stringify(userAnswers)}` },
+    ];
+
+    const historyContent = conversationHistory
+      .map((entry) => `${entry.role}: ${entry.content}`)
+      .join("\n");
+    const prompt = `Here are the questions and user answers: \n${historyContent} \n\nBased on these answers, suggest exactly 3 foods that match the user's character and mood.
+    Output strictly in JSON format as:
+    [
+      {
+        "food": "Food item name",
+        "description": "Brief description of why it matches their mood"
+      },
+      ...
+    ]
+    Only return the JSON, nothing else.`;
+
+    const result = await model.generateContent(prompt);
+    let responseText = await result.response.text();
+    responseText = responseText.trim();
+
+    let suggestions;
+    try {
+      suggestions = JSON.parse(responseText);
+    } catch (jsonError) {
+      console.error(
+        "Error parsing JSON:",
+        jsonError,
+        "Response:",
+        responseText
+      );
+      return res
+        .status(500)
+        .json({ message: "Failed to parse suggestions JSON format." });
+    }
+
+    res.status(200).json(suggestions);
+
   } catch (error) {
-      console.error('Error generating suggestions:', error);
-      res.status(500).json({ error: 'Failed to generate suggestions' });
+    console.error("Error generating suggestions:", error);
+    res.status(500).json({ error: "Failed to generate suggestions" });
   }
 };
