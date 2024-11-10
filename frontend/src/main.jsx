@@ -9,7 +9,7 @@ import ContactUs from './components/ContactUs/ContactUs.jsx'
 import Login from './components/Login/Login.jsx'
 import SignUp from './components/SignUp/SignUp.jsx'
 import DisplaySuggestions from './components/DisplaySuggestions/DisplaySuggestions.jsx'
-export const server="http://localhost:4000/api/v1";
+export const server="https://fm-mern.onrender.com/api/v1";
 const router=createBrowserRouter(
   createRoutesFromChildren(
     <Route path='/' element={<App/>}>
