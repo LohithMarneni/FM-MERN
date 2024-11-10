@@ -11,9 +11,10 @@ export const sendCookie=(user,res,message,statusCode=200)=>{
     const token=jwt.sign({
         _id:user._id
     },process.env.JWT_SECRET)
+    // console.log(token);
     res.status(statusCode).cookie("token",token,{
          httpOnly:true,
-         maxAge:10*60*1000,//increase to 1 hr in future present kept for 1 min for testing
+         maxAge:60*60*1000,//increase to 1 hr in future present kept for 1 min for testing
          sameSite:process.env.NODE_ENV==="Development"?"lax":"none",
          secure:process.env.NODE_ENV==="Development"?false:true,
     }).json({
